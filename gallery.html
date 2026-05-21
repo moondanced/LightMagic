@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LightMagic</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-a: #e0f7ff;
+      --bg-b: #ccfbf1;
+      --bg-c: #f8fafc;
+      --panel: rgba(255, 255, 255, 0.5);
+      --border: rgba(255, 255, 255, 0.78);
+      --text: #075985;
+      --muted: #0f766e;
+      --shadow: rgba(8, 47, 73, 0.16);
+      --white: #ffffff;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: #0f172a;
+      background:
+        radial-gradient(circle at 14% 8%, rgba(56, 189, 248, 0.38), transparent 30rem),
+        radial-gradient(circle at 82% 14%, rgba(45, 212, 191, 0.32), transparent 32rem),
+        radial-gradient(circle at 50% 92%, rgba(255, 255, 255, 0.86), transparent 36rem),
+        linear-gradient(135deg, var(--bg-a) 0%, var(--bg-b) 46%, var(--bg-c) 100%);
+      background-attachment: fixed;
+    }
+
+    .page { width: min(1280px, 100%); margin: 0 auto; padding: 32px 20px 48px; }
+
+    .hero {
+      margin-bottom: 30px;
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      background: var(--panel);
+      box-shadow: 0 24px 80px var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+      grid-template-areas:
+        "nav music"
+        "copy music"
+        "copy search";
+      align-items: start;
+      gap: 22px 32px;
+    }
+
+    .nav-row { grid-area: nav; display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .nav-link,
+    .pill-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      border-radius: 999px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.72);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: 0 10px 26px rgba(14, 165, 233, 0.12);
+      cursor: pointer;
+    }
+
+    .copy-block { grid-area: copy; max-width: 760px; padding-top: 2px; }
+    h1 { font-size: clamp(46px, 7.4vw, 86px); line-height: 0.98; letter-spacing: -0.065em; font-weight: 850; color: var(--text); }
+    .intro { max-width: 780px; margin-top: 20px; color: var(--muted); font-size: 17px; line-height: 1.85; }
+
+    .music-dock {
+      grid-area: music;
+      justify-self: end;
+      width: min(520px, 100%);
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(255,255,255,.78), rgba(224,242,254,.62)), rgba(255,255,255,.56);
+      box-shadow: 0 16px 38px rgba(14,165,233,.16), 0 8px 28px rgba(20,184,166,.1);
+      backdrop-filter: blur(16px);
+    }
+
+    .music-main-row { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+    .music-icon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; color: #fff; background: linear-gradient(135deg, #06b6d4, #14b8a6); box-shadow: 0 10px 24px rgba(14,165,233,.28); font-size: 18px; font-weight: 900; }
+    .track-info { min-width: 0; }
+    .track-label { color: #0891b2; font-size: 12px; font-weight: 800; letter-spacing: 0.04em; }
+    .track-title { margin-top: 2px; overflow: hidden; color: var(--text); font-size: 15px; font-weight: 850; white-space: nowrap; text-overflow: ellipsis; }
+    .music-controls { display: inline-flex; align-items: center; gap: 8px; }
+
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 12px 28px rgba(14, 165, 233, 0.18);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .icon-button:hover { transform: translateY(-1px); box-shadow: 0 16px 34px rgba(14,165,233,.24); }
+    .icon-button img { display: block; width: 22px; height: 22px; pointer-events: none; }
+    .play-button { width: 50px; height: 50px; }
+    .play-button img { width: 26px; height: 26px; }
+    .music-subrow { display: grid; grid-template-columns: minmax(0, 1fr) 170px; align-items: center; gap: 12px; margin-top: 10px; padding: 0 4px 0 52px; }
+    .music-status { min-width: 0; overflow: hidden; color: var(--muted); font-size: 12px; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
+    .volume-control { display: flex; align-items: center; gap: 8px; color: #0891b2; font-size: 12px; font-weight: 800; }
+    .volume-control input { width: 100%; accent-color: #06b6d4; }
+    .autoplay-banner { display: none; margin-top: 10px; padding: 10px 12px; border: 1px solid rgba(14,165,233,.18); border-radius: 18px; color: var(--text); background: rgba(255,255,255,.68); font-size: 13px; line-height: 1.5; }
+    .autoplay-banner.show { display: block; }
+    .autoplay-banner button { margin-left: 8px; border: 0; border-radius: 999px; padding: 6px 12px; color: #fff; background: linear-gradient(135deg, #0891b2, #14b8a6); font-weight: 800; cursor: pointer; }
+
+    .hero-tools { grid-area: search; align-self: end; justify-self: end; width: min(430px, 100%); margin-top: 18px; }
+    .search-box { width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,.72); border-radius: 24px; background: rgba(255,255,255,.42); box-shadow: 0 16px 42px rgba(8,47,73,.12); backdrop-filter: blur(14px); }
+    .search-box input { width: 100%; padding: 14px 16px; border: 1px solid rgba(14,165,233,.18); border-radius: 18px; outline: 0; color: var(--text); background: rgba(255,255,255,.78); font-size: 15px; }
+    .search-box input::placeholder { color: #38bdf8; }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+    .filter-button { border: 1px solid rgba(255,255,255,.78); border-radius: 999px; padding: 11px 20px; color: var(--text); background: rgba(255,255,255,.44); font-size: 14px; font-weight: 760; cursor: pointer; box-shadow: 0 12px 30px rgba(14,165,233,.1); transition: transform .2s ease, background .2s ease, color .2s ease; }
+    .filter-button:hover { transform: translateY(-1px); background: rgba(255,255,255,.7); }
+    .filter-button.active { color: #fff; background: linear-gradient(135deg, #0891b2, #14b8a6); border-color: rgba(255,255,255,.9); }
+
+    .gallery { column-count: 4; column-gap: 20px; }
+    .photo-card { position: relative; display: inline-block; width: 100%; margin: 0 0 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.76); border-radius: 28px; background: rgba(255,255,255,.3); box-shadow: 0 18px 50px rgba(8,47,73,.16); break-inside: avoid; opacity: 0; transform: translateY(14px); animation: fadeUp .5s ease forwards; cursor: zoom-in; }
+    .photo-card:focus-visible { outline: 3px solid rgba(14,165,233,.72); outline-offset: 4px; }
+    .photo-card img { display: block; width: 100%; height: auto; transition: transform .55s ease; }
+    .photo-card:hover img { transform: scale(1.055); }
+    .photo-info { position: absolute; inset: auto 0 0 0; padding: 55px 20px 20px; background: linear-gradient(to top, rgba(7,89,133,.82), transparent); opacity: 0; transform: translateY(12px); transition: opacity .25s ease, transform .25s ease; pointer-events: none; }
+    .photo-card:hover .photo-info { opacity: 1; transform: translateY(0); }
+    .photo-category { display: inline-block; margin-bottom: 8px; padding: 5px 10px; border-radius: 999px; color: var(--text); background: rgba(255,255,255,.92); font-size: 12px; font-weight: 800; }
+    .photo-title { color: #fff; font-size: 20px; font-weight: 800; }
+
+    .lightbox { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 28px; }
+    .lightbox.show { display: flex; }
+    .lightbox-backdrop { position: absolute; inset: 0; border: 0; background: radial-gradient(circle at 50% 20%, rgba(14,165,233,.24), transparent 36rem), rgba(5,23,42,.78); backdrop-filter: blur(18px); cursor: zoom-out; }
+    .lightbox-panel { position: relative; z-index: 1; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "prev image next" "prev caption next"; align-items: center; gap: 16px; width: min(1180px, 100%); max-height: calc(100vh - 56px); }
+    .lightbox-image-wrap { grid-area: image; display: flex; align-items: center; justify-content: center; min-width: 0; max-height: calc(100vh - 150px); overflow: hidden; border: 1px solid rgba(255,255,255,.78); border-radius: 28px; background: rgba(255,255,255,.12); box-shadow: 0 26px 90px rgba(0,0,0,.38); cursor: zoom-in; touch-action: none; }
+    .lightbox-image-wrap.is-zoomed { cursor: grab; }
+    .lightbox-image-wrap.is-dragging { cursor: grabbing; }
+    .lightbox-image { display: block; max-width: 100%; max-height: calc(100vh - 150px); width: auto; height: auto; object-fit: contain; transform-origin: center center; transition: transform .18s ease; user-select: none; -webkit-user-drag: none; }
+    .lightbox-caption { grid-area: caption; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid rgba(255,255,255,.72); border-radius: 999px; color: var(--text); background: rgba(255,255,255,.78); box-shadow: 0 14px 38px rgba(8,47,73,.18); backdrop-filter: blur(14px); font-weight: 800; }
+    .lightbox-title { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .lightbox-meta { display: inline-flex; align-items: center; gap: 8px; }
+    .lightbox-counter, .zoom-level { color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .zoom-button { padding: 8px 12px; border: 1px solid rgba(14,165,233,.22); border-radius: 999px; color: var(--text); background: rgba(255,255,255,.94); font-size: 13px; font-weight: 900; cursor: pointer; }
+
+    .lightbox-close,
+    .lightbox-nav { display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.82); border-radius: 999px; color: var(--text); background: rgba(255,255,255,.9); box-shadow: 0 14px 38px rgba(8,47,73,.18); cursor: pointer; transition: transform .2s ease, background .2s ease; }
+    .lightbox-close:hover,
+    .lightbox-nav:hover { transform: translateY(-1px) scale(1.03); background: #fff; }
+    .lightbox-close { position: absolute; z-index: 2; top: -10px; right: -10px; width: 44px; height: 44px; font-size: 28px; line-height: 1; font-weight: 500; }
+    .lightbox-nav { width: 52px; height: 52px; }
+    .lightbox-prev { grid-area: prev; }
+    .lightbox-next { grid-area: next; }
+    .lightbox-nav img { width: 26px; height: 26px; pointer-events: none; }
+
+    .empty { display: none; padding: 46px 20px; border: 1px solid rgba(255,255,255,.76); border-radius: 28px; color: var(--muted); background: rgba(255,255,255,.44); text-align: center; }
+    .load-more-wrap { display: flex; justify-content: center; margin-top: 22px; }
+    .load-more { border: 1px solid rgba(255,255,255,.9); border-radius: 999px; padding: 14px 28px; color: var(--text); background: rgba(255,255,255,.96); font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 14px 34px rgba(14,165,233,.18); transition: transform .2s ease; }
+    .load-more:hover { transform: translateY(-1px) scale(1.02); }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 1100px) {
+      .hero-layout { grid-template-columns: 1fr; grid-template-areas: "music" "nav" "copy" "search"; }
+      .music-dock, .hero-tools { justify-self: start; width: min(560px, 100%); }
+      .gallery { column-count: 3; }
+    }
+
+    @media (max-width: 760px) {
+      .page { padding: 20px 14px 40px; }
+      .hero { padding: 22px; border-radius: 26px; }
+      .music-dock { width: 100%; border-radius: 26px; }
+      .music-main-row { grid-template-columns: 40px minmax(0, 1fr); }
+      .music-controls { grid-column: 1 / -1; justify-content: center; }
+      .music-subrow { grid-template-columns: 1fr; padding-left: 0; }
+      .music-status { white-space: normal; }
+      h1 { font-size: clamp(42px, 14vw, 64px); }
+      .gallery { column-count: 2; column-gap: 14px; }
+      .photo-card { margin-bottom: 14px; border-radius: 22px; }
+      .lightbox { padding: 14px; }
+      .lightbox-panel { grid-template-columns: 1fr 1fr; grid-template-areas: "image image" "caption caption" "prev next"; gap: 12px; }
+      .lightbox-image-wrap { max-height: calc(100vh - 210px); border-radius: 22px; }
+      .lightbox-image { max-height: calc(100vh - 210px); }
+      .lightbox-caption { grid-template-columns: 1fr; border-radius: 22px; }
+      .lightbox-meta { flex-wrap: wrap; }
+      .lightbox-nav { justify-self: center; width: 56px; height: 46px; }
+      .lightbox-close { top: -8px; right: -8px; }
+      .load-more-wrap { margin-top: 8px; transform: translateY(-8px); }
+    }
+    @media (max-width: 480px) { .gallery { column-count: 1; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="hero-layout">
+        <nav class="nav-row" aria-label="页面导航"><a class="nav-link" href="index.html">预览界面</a></nav>
+
+        <section class="music-dock" aria-label="背景音乐控制">
+          <div class="music-main-row">
+            <span class="music-icon">♪</span>
+            <div class="track-info"><div class="track-label">NOW PLAYING · AUTO</div><div class="track-title" id="trackTitle">准备播放</div></div>
+            <div class="music-controls">
+              <button class="icon-button" id="prevButton" type="button" aria-label="上一首"><img src="assets/icons/previous.svg" alt="" /></button>
+              <button class="icon-button play-button" id="musicButton" type="button" aria-label="播放或暂停"><img id="playPauseIcon" src="assets/icons/play.svg" alt="" /></button>
+              <button class="icon-button" id="nextButton" type="button" aria-label="下一首"><img src="assets/icons/next.svg" alt="" /></button>
+            </div>
+          </div>
+          <div class="music-subrow"><div class="music-status" id="musicStatus">进入页面后将自动尝试播放音乐。</div><label class="volume-control">音量 <input id="volumeInput" type="range" min="0" max="1" step="0.01" value="0.8" /></label></div>
+          <div class="autoplay-banner" id="autoplayBanner">浏览器拦截了自动播放。<button type="button" id="unlockAudioButton">点击开启音乐</button></div>
+          <audio id="backgroundMusic" preload="auto" playsinline></audio>
+        </section>
+
+        <section class="copy-block" aria-label="相册说明"><h1>P-1899</h1><p class="intro">菲林都已拆走</p></section>
+        <div class="hero-tools"><div class="search-box"><input id="searchInput" type="search" placeholder="搜索照片标题或分类..." /></div></div>
+      </div>
+    </header>
+
+    <nav class="filters" id="filters"></nav>
+    <section class="gallery" id="gallery"></section>
+    <div class="empty" id="emptyState">没有找到匹配的照片。</div>
+    <div class="load-more-wrap"><button class="load-more" id="loadMoreButton">更多照片</button></div>
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-backdrop" id="lightboxBackdrop" type="button" aria-label="关闭放大预览"></button>
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="照片放大预览">
+      <button class="lightbox-close" id="lightboxClose" type="button" aria-label="关闭">×</button>
+      <button class="lightbox-nav lightbox-prev" id="lightboxPrev" type="button" aria-label="上一张"><img src="assets/icons/previous.svg" alt="" /></button>
+      <div class="lightbox-image-wrap" id="lightboxImageWrap" title="点击可放大/还原，滚轮可继续缩放，拖拽可移动">
+        <img class="lightbox-image" id="lightboxImage" src="" alt="" draggable="false" />
+      </div>
+      <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="下一张"><img src="assets/icons/next.svg" alt="" /></button>
+      <div class="lightbox-caption">
+        <span class="lightbox-title" id="lightboxTitle"></span>
+        <span class="lightbox-meta">
+          <span class="lightbox-counter" id="lightboxCounter"></span>
+          <span class="zoom-level" id="zoomLevel">100%</span>
+          <button class="zoom-button" id="zoomToggleButton" type="button">放大</button>
+          <button class="zoom-button" id="zoomResetButton" type="button">还原</button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/photos.js"></script>
+  <script>
+    const AUDIO_TRACKS = [
+      { title: "觉梦境", localSrc: "assets/audio/1-觉梦境.mp3", remoteSrc: "https://raw.githubusercontent.com/moondanced/CodeX-Moondance/main/examples/waterfall-gallery/assets/audio/1-%E8%A7%89%E6%A2%A6%E5%A2%83.mp3" },
+      { title: "Return Inanimateness", localSrc: "assets/audio/2-Return-Inanimateness.mp3", remoteSrc: "https://raw.githubusercontent.com/moondanced/CodeX-Moondance/main/examples/waterfall-gallery/assets/audio/2-Return-Inanimateness.mp3" },
+      { title: "荧彩", localSrc: "assets/audio/3-荧彩.mp3", remoteSrc: "https://raw.githubusercontent.com/moondanced/CodeX-Moondance/main/examples/waterfall-gallery/assets/audio/3-%E8%8D%A7%E5%BD%A9.mp3" },
+      { title: "心之海", localSrc: "assets/audio/4-心之海.mp3", remoteSrc: "https://raw.githubusercontent.com/moondanced/CodeX-Moondance/main/examples/waterfall-gallery/assets/audio/4-%E5%BF%83%E4%B9%8B%E6%B5%B7.mp3" },
+      { title: "永远的永远", localSrc: "assets/audio/5-永远的永远.mp3", remoteSrc: "https://raw.githubusercontent.com/moondanced/CodeX-Moondance/main/examples/waterfall-gallery/assets/audio/5-%E6%B0%B8%E8%BF%9C%E7%9A%84%E6%B0%B8%E8%BF%9C.mp3" }
+    ];
+    const AUDIO_CONFIG = { loopPlaylist: true, volume: 0.8, autoplay: true, autoplayDelayMs: 450 };
+
+    const rawPhotos = Array.isArray(window.PHOTO_ITEMS) ? window.PHOTO_ITEMS : [];
+    const photos = rawPhotos.map((photo) => ({ ...photo, src: photo.src }));
+    const categories = Array.isArray(window.PHOTO_CATEGORIES) ? window.PHOTO_CATEGORIES : ["全部"];
+
+    let currentCategory = "全部";
+    let currentKeyword = "";
+    let visibleCount = 12;
+    let currentVisiblePhotos = [];
+    let activeLightboxIndex = 0;
+    let zoomScale = 1;
+    let zoomX = 0;
+    let zoomY = 0;
+    let isDraggingImage = false;
+    let hasDraggedImage = false;
+    let suppressNextImageClick = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragOriginX = 0;
+    let dragOriginY = 0;
+    const IMAGE_DRAG_THRESHOLD = 7;
+    let currentTrackIndex = 0;
+    let musicPlaying = false;
+    let currentSourceMode = "local";
+    let suppressNextError = false;
+    let autoplayAttempted = false;
+
+    const filtersElement = document.getElementById("filters");
+    const galleryElement = document.getElementById("gallery");
+    const searchInput = document.getElementById("searchInput");
+    const emptyState = document.getElementById("emptyState");
+    const loadMoreButton = document.getElementById("loadMoreButton");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxBackdrop = document.getElementById("lightboxBackdrop");
+    const lightboxClose = document.getElementById("lightboxClose");
+    const lightboxPrev = document.getElementById("lightboxPrev");
+    const lightboxNext = document.getElementById("lightboxNext");
+    const lightboxImageWrap = document.getElementById("lightboxImageWrap");
+    const lightboxImage = document.getElementById("lightboxImage");
+    const lightboxTitle = document.getElementById("lightboxTitle");
+    const lightboxCounter = document.getElementById("lightboxCounter");
+    const zoomLevel = document.getElementById("zoomLevel");
+    const zoomToggleButton = document.getElementById("zoomToggleButton");
+    const zoomResetButton = document.getElementById("zoomResetButton");
+    const trackTitle = document.getElementById("trackTitle");
+    const musicButton = document.getElementById("musicButton");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+    const playPauseIcon = document.getElementById("playPauseIcon");
+    const musicStatus = document.getElementById("musicStatus");
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    const volumeInput = document.getElementById("volumeInput");
+    const autoplayBanner = document.getElementById("autoplayBanner");
+    const unlockAudioButton = document.getElementById("unlockAudioButton");
+
+    function getFilteredPhotos() {
+      return photos.filter((photo) => {
+        const matchCategory = currentCategory === "全部" || photo.category === currentCategory;
+        const keyword = currentKeyword.trim().toLowerCase();
+        const matchKeyword = !keyword || photo.title.toLowerCase().includes(keyword) || photo.category.toLowerCase().includes(keyword);
+        return matchCategory && matchKeyword;
+      });
+    }
+
+    function renderFilters() {
+      filtersElement.innerHTML = "";
+      categories.forEach((category) => {
+        const button = document.createElement("button");
+        button.className = `filter-button ${category === currentCategory ? "active" : ""}`;
+        button.textContent = category;
+        button.addEventListener("click", () => { currentCategory = category; visibleCount = 12; render(); });
+        filtersElement.appendChild(button);
+      });
+    }
+
+    function renderGallery() {
+      const filteredPhotos = getFilteredPhotos();
+      const visiblePhotos = filteredPhotos.slice(0, visibleCount);
+      currentVisiblePhotos = visiblePhotos;
+      galleryElement.innerHTML = "";
+      visiblePhotos.forEach((photo, index) => {
+        const card = document.createElement("article");
+        card.className = "photo-card";
+        card.tabIndex = 0;
+        card.setAttribute("role", "button");
+        card.setAttribute("aria-label", `放大查看 ${photo.title}`);
+        card.style.animationDelay = `${Math.min(index * 0.04, 0.4)}s`;
+        card.innerHTML = `<img src="${photo.src}" alt="${photo.title}" loading="lazy" /><div class="photo-info"><span class="photo-category">${photo.category}</span><div class="photo-title">${photo.title}</div></div>`;
+        card.addEventListener("click", () => openLightbox(index));
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openLightbox(index); }
+        });
+        galleryElement.appendChild(card);
+      });
+      emptyState.style.display = visiblePhotos.length === 0 ? "block" : "none";
+      loadMoreButton.style.display = visibleCount < filteredPhotos.length ? "inline-block" : "none";
+    }
+
+    function render() { renderFilters(); renderGallery(); }
+
+    function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
+
+    function applyZoom() {
+      if (zoomScale <= 1) { zoomX = 0; zoomY = 0; }
+      lightboxImage.style.transform = `translate(${zoomX}px, ${zoomY}px) scale(${zoomScale})`;
+      zoomLevel.textContent = `${Math.round(zoomScale * 100)}%`;
+      zoomToggleButton.textContent = zoomScale > 1 ? "继续放大" : "放大";
+      lightboxImageWrap.classList.toggle("is-zoomed", zoomScale > 1);
+    }
+
+    function setZoom(nextScale) {
+      zoomScale = clamp(nextScale, 1, 4);
+      applyZoom();
+    }
+
+    function resetZoom() {
+      zoomScale = 1;
+      zoomX = 0;
+      zoomY = 0;
+      hasDraggedImage = false;
+      suppressNextImageClick = false;
+      applyZoom();
+    }
+
+    function toggleZoom() {
+      if (zoomScale < 1.9) setZoom(2);
+      else if (zoomScale < 2.9) setZoom(3);
+      else resetZoom();
+    }
+
+    function renderLightbox() {
+      const photo = currentVisiblePhotos[activeLightboxIndex];
+      if (!photo) return;
+      resetZoom();
+      lightboxImage.src = photo.src;
+      lightboxImage.alt = photo.title;
+      lightboxTitle.textContent = `${photo.title} · ${photo.category}`;
+      lightboxCounter.textContent = `${activeLightboxIndex + 1} / ${currentVisiblePhotos.length}`;
+    }
+
+    function openLightbox(index) {
+      if (!currentVisiblePhotos.length) return;
+      activeLightboxIndex = index;
+      renderLightbox();
+      lightbox.classList.add("show");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      lightboxClose.focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove("show");
+      lightbox.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      lightboxImage.removeAttribute("src");
+      resetZoom();
+    }
+
+    function showLightboxByOffset(offset) {
+      if (!currentVisiblePhotos.length) return;
+      activeLightboxIndex = (activeLightboxIndex + offset + currentVisiblePhotos.length) % currentVisiblePhotos.length;
+      renderLightbox();
+    }
+
+    lightboxImageWrap.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (suppressNextImageClick || hasDraggedImage) {
+        suppressNextImageClick = false;
+        hasDraggedImage = false;
+        return;
+      }
+      toggleZoom();
+    });
+    lightboxImageWrap.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      const direction = event.deltaY < 0 ? 0.22 : -0.22;
+      setZoom(zoomScale + direction);
+    }, { passive: false });
+    lightboxImageWrap.addEventListener("pointerdown", (event) => {
+      if (zoomScale <= 1) return;
+      isDraggingImage = true;
+      hasDraggedImage = false;
+      dragStartX = event.clientX;
+      dragStartY = event.clientY;
+      dragOriginX = zoomX;
+      dragOriginY = zoomY;
+      lightboxImageWrap.classList.add("is-dragging");
+      lightboxImageWrap.setPointerCapture(event.pointerId);
+    });
+    lightboxImageWrap.addEventListener("pointermove", (event) => {
+      if (!isDraggingImage) return;
+      const moveX = event.clientX - dragStartX;
+      const moveY = event.clientY - dragStartY;
+      if (Math.hypot(moveX, moveY) >= IMAGE_DRAG_THRESHOLD) {
+        hasDraggedImage = true;
+      }
+      zoomX = dragOriginX + moveX;
+      zoomY = dragOriginY + moveY;
+      applyZoom();
+    });
+    lightboxImageWrap.addEventListener("pointerup", (event) => {
+      if (!isDraggingImage) return;
+      if (hasDraggedImage) {
+        suppressNextImageClick = true;
+        window.setTimeout(() => {
+          suppressNextImageClick = false;
+          hasDraggedImage = false;
+        }, 160);
+      }
+      isDraggingImage = false;
+      lightboxImageWrap.classList.remove("is-dragging");
+      if (lightboxImageWrap.hasPointerCapture(event.pointerId)) {
+        lightboxImageWrap.releasePointerCapture(event.pointerId);
+      }
+    });
+    lightboxImageWrap.addEventListener("pointercancel", (event) => {
+      isDraggingImage = false;
+      hasDraggedImage = false;
+      suppressNextImageClick = false;
+      lightboxImageWrap.classList.remove("is-dragging");
+      if (lightboxImageWrap.hasPointerCapture(event.pointerId)) {
+        lightboxImageWrap.releasePointerCapture(event.pointerId);
+      }
+    });
+    zoomToggleButton.addEventListener("click", toggleZoom);
+    zoomResetButton.addEventListener("click", resetZoom);
+
+    function resolveLocalAudioUrl(path) { return path; }
+    function getTrackUrl(track, mode) { return mode === "remote" ? track.remoteSrc : resolveLocalAudioUrl(track.localSrc); }
+    function updatePlayIcon() { playPauseIcon.src = musicPlaying ? "assets/icons/pause.svg" : "assets/icons/play.svg"; }
+    function setTrackDisplay(message) { const track = AUDIO_TRACKS[currentTrackIndex]; trackTitle.textContent = track ? track.title : "未配置音乐"; musicStatus.textContent = message; }
+    function showAutoplayBanner(show) { autoplayBanner.classList.toggle("show", show); }
+
+    function loadTrack(index, shouldPlay, mode = "local") {
+      if (!AUDIO_TRACKS.length) { setTrackDisplay("未配置音乐文件。请将文件放入 assets/audio/ 并更新 AUDIO_TRACKS。"); return; }
+      currentTrackIndex = (index + AUDIO_TRACKS.length) % AUDIO_TRACKS.length;
+      currentSourceMode = mode;
+      const track = AUDIO_TRACKS[currentTrackIndex];
+      suppressNextError = true;
+      backgroundMusic.pause();
+      backgroundMusic.removeAttribute("src");
+      backgroundMusic.load();
+      suppressNextError = false;
+      backgroundMusic.src = getTrackUrl(track, mode);
+      backgroundMusic.load();
+      setTrackDisplay(mode === "remote" ? `正在从 GitHub Raw 加载：${track.title}` : `正在加载本地音频：${track.title}`);
+      if (shouldPlay) playMusic();
+    }
+
+    async function playMusic(options = {}) {
+      if (!AUDIO_TRACKS.length) return;
+      const track = AUDIO_TRACKS[currentTrackIndex];
+      backgroundMusic.muted = false;
+      backgroundMusic.volume = Number(volumeInput.value);
+      try {
+        await backgroundMusic.play();
+        musicPlaying = true;
+        showAutoplayBanner(false);
+        updatePlayIcon();
+        setTrackDisplay(`${track.title} 正在播放`);
+      } catch (error) {
+        musicPlaying = false;
+        updatePlayIcon();
+        if (error && error.name === "NotAllowedError") {
+          showAutoplayBanner(true);
+          setTrackDisplay("自动播放被浏览器拦截，请点击播放按钮开启音乐。");
+          return;
+        }
+        if (currentSourceMode === "local" && window.location.protocol !== "file:") { loadTrack(currentTrackIndex, true, "remote"); return; }
+        if (options.autoplay) { showAutoplayBanner(true); setTrackDisplay("自动播放被浏览器拦截，请点击开启音乐。"); }
+        else setTrackDisplay("播放失败：请确认音频文件可访问，或在 GitHub 页面中打开 v3 相册。当前文件格式为 MP3。");
+      }
+    }
+
+    function pauseMusic() { backgroundMusic.pause(); musicPlaying = false; updatePlayIcon(); setTrackDisplay(`当前音乐：${AUDIO_TRACKS[currentTrackIndex].title}`); }
+    function playTrackByOffset(offset, shouldPlay = musicPlaying) { loadTrack(currentTrackIndex + offset, shouldPlay, "local"); }
+    function attemptAutoplay() { if (!AUDIO_CONFIG.autoplay || autoplayAttempted) return; autoplayAttempted = true; playMusic({ autoplay: true }); }
+
+    searchInput.addEventListener("input", (event) => { currentKeyword = event.target.value; visibleCount = 12; render(); });
+    loadMoreButton.addEventListener("click", () => { visibleCount += 6; renderGallery(); });
+    lightboxBackdrop.addEventListener("click", closeLightbox);
+    lightboxClose.addEventListener("click", closeLightbox);
+    lightboxPrev.addEventListener("click", () => showLightboxByOffset(-1));
+    lightboxNext.addEventListener("click", () => showLightboxByOffset(1));
+    document.addEventListener("keydown", (event) => {
+      if (!lightbox.classList.contains("show")) return;
+      if (event.key === "Escape") closeLightbox();
+      if (event.key === "ArrowLeft") showLightboxByOffset(-1);
+      if (event.key === "ArrowRight") showLightboxByOffset(1);
+      if (event.key.toLowerCase() === "z") toggleZoom();
+      if (event.key === "0") resetZoom();
+    });
+    musicButton.addEventListener("click", () => { musicPlaying ? pauseMusic() : playMusic(); });
+    unlockAudioButton.addEventListener("click", () => playMusic());
+    prevButton.addEventListener("click", () => playTrackByOffset(-1));
+    nextButton.addEventListener("click", () => playTrackByOffset(1));
+    volumeInput.addEventListener("input", (event) => { backgroundMusic.volume = Number(event.target.value); });
+    backgroundMusic.addEventListener("canplay", () => { if (!musicPlaying) setTrackDisplay(`当前音乐：${AUDIO_TRACKS[currentTrackIndex].title}`); });
+    backgroundMusic.addEventListener("ended", () => { if (currentTrackIndex === AUDIO_TRACKS.length - 1 && !AUDIO_CONFIG.loopPlaylist) { pauseMusic(); return; } playTrackByOffset(1, true); });
+    backgroundMusic.addEventListener("error", () => {
+      if (suppressNextError || !AUDIO_TRACKS.length) return;
+      if (currentSourceMode === "local" && window.location.protocol !== "file:") { loadTrack(currentTrackIndex, musicPlaying || autoplayAttempted, "remote"); return; }
+      const error = backgroundMusic.error;
+      const code = error ? error.code : "unknown";
+      musicPlaying = false;
+      updatePlayIcon();
+      setTrackDisplay(`音频加载失败，错误码：${code}。若本地打开，请先 git pull；若 GitHub Raw 不可访问，请改用 GitHub Pages 或本地文件。`);
+    });
+
+    backgroundMusic.volume = AUDIO_CONFIG.volume;
+    volumeInput.value = AUDIO_CONFIG.volume;
+    updatePlayIcon();
+    loadTrack(0, false, "local");
+    render();
+    window.setTimeout(attemptAutoplay, AUDIO_CONFIG.autoplayDelayMs);
+  </script>
+</body>
+</html>

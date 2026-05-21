@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LightMagic</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-a: #e0f7ff;
+      --bg-b: #d1fae5;
+      --bg-c: #f8fafc;
+      --cyan: rgba(34, 211, 238, 0.48);
+      --green: rgba(74, 222, 128, 0.38);
+      --blue: rgba(56, 189, 248, 0.42);
+      --white: rgba(255, 255, 255, 0.94);
+      --button-text: #075985;
+      --gap: 14px;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(56, 189, 248, 0.34), transparent 30rem),
+        radial-gradient(circle at 78% 18%, rgba(74, 222, 128, 0.28), transparent 32rem),
+        linear-gradient(135deg, var(--bg-a) 0%, var(--bg-b) 46%, var(--bg-c) 100%);
+    }
+
+    .stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      min-height: 620px;
+      overflow: hidden;
+    }
+
+    .desktop-layout {
+      position: absolute;
+      inset: -6vh -3vw;
+      display: grid;
+      grid-template-columns: minmax(210px, 20vw) minmax(0, 1fr);
+      gap: 22px;
+      transform: translate3d(0, 0, 0);
+      transform-origin: center;
+      opacity: 0.94;
+    }
+
+    .fixed-column,
+    .desktop-flow-zone {
+      min-width: 0;
+      height: 116vh;
+      overflow: hidden;
+      contain: layout paint;
+    }
+
+    .fixed-column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      padding-top: 8px;
+    }
+
+    .fixed-card,
+    .desktop-flow-card,
+    .mobile-flow-card {
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 12px 34px rgba(8, 47, 73, 0.17);
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+    }
+
+    .fixed-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.32);
+    }
+
+    .fixed-card img,
+    .desktop-flow-card img,
+    .mobile-flow-card img {
+      display: block;
+      width: 100%;
+      transform: translateZ(0);
+    }
+
+    .fixed-card img {
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .desktop-flow-card img,
+    .mobile-flow-card img {
+      height: auto;
+      object-fit: cover;
+    }
+
+    .fixed-card:nth-child(1) { height: 14vh; min-height: 108px; }
+    .fixed-card:nth-child(2) { height: 17vh; min-height: 130px; }
+    .fixed-card:nth-child(3) { height: 13vh; min-height: 100px; }
+    .fixed-card:nth-child(4) { height: 16vh; min-height: 122px; }
+    .fixed-card:nth-child(5) { height: 14vh; min-height: 108px; }
+    .fixed-card:nth-child(6) { height: 17vh; min-height: 130px; }
+    .fixed-card:nth-child(7) { height: 13vh; min-height: 100px; }
+
+    .desktop-flow-zone {
+      display: flex;
+      justify-content: center;
+      padding-right: 2.5vw;
+    }
+
+    .desktop-flow-window {
+      width: min(1120px, 100%);
+      height: 116vh;
+      overflow: hidden;
+      contain: layout paint;
+    }
+
+    .desktop-flow-track,
+    .mobile-flow-track {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: flowUp var(--flow-duration) linear infinite;
+      transform: translate3d(0, 0, 0);
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+
+    .desktop-flow-card {
+      width: 100%;
+      flex: 0 0 auto;
+    }
+
+    .mobile-flow-wall {
+      display: none;
+    }
+
+    .top-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom, rgba(240, 249, 255, 0.2), transparent 28%, transparent 64%, rgba(14, 165, 233, 0.18)),
+        linear-gradient(90deg, rgba(224, 242, 254, 0.18), transparent 28%, transparent 72%, rgba(236, 253, 245, 0.18));
+    }
+
+    .bottom-mask {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 58vh;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 22% 100%, rgba(34, 211, 238, 0.54), transparent 34rem),
+        radial-gradient(circle at 78% 100%, rgba(74, 222, 128, 0.44), transparent 34rem),
+        linear-gradient(to top, rgba(240, 253, 250, 0.98) 0%, rgba(186, 230, 253, 0.84) 36%, rgba(45, 212, 191, 0.48) 68%, rgba(14, 165, 233, 0) 100%);
+    }
+
+    .entry {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(42px, 8.5vh, 90px);
+      z-index: 3;
+      transform: translateX(-50%);
+    }
+
+    .enter-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 182px;
+      min-height: 56px;
+      padding: 0 34px;
+      border: 1px solid rgba(255, 255, 255, 0.96);
+      border-radius: 999px;
+      color: var(--button-text);
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 18px 48px rgba(14, 165, 233, 0.26), 0 12px 38px rgba(16, 185, 129, 0.18);
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .enter-button:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 22px 58px rgba(14, 165, 233, 0.34), 0 16px 48px rgba(16, 185, 129, 0.24);
+    }
+
+    @keyframes flowUp {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(0, -50%, 0); }
+    }
+
+    @keyframes flowDown {
+      from { transform: translate3d(0, -50%, 0); }
+      to { transform: translate3d(0, 0, 0); }
+    }
+
+    @media (max-width: 900px) {
+      :root {
+        --gap: 12px;
+      }
+
+      .stage {
+        min-height: 560px;
+      }
+
+      .desktop-layout {
+        display: none;
+      }
+
+      .mobile-flow-wall {
+        position: absolute;
+        inset: -10vh -18vw;
+        display: grid;
+        grid-template-columns: repeat(var(--mobile-column-count), minmax(0, 1fr));
+        gap: var(--gap);
+        transform: rotate(-2deg) scale(1.06) translate3d(0, 0, 0);
+        opacity: 0.84;
+        backface-visibility: hidden;
+        will-change: transform;
+      }
+
+      .mobile-flow-column {
+        min-width: 0;
+        overflow: hidden;
+        contain: layout paint;
+      }
+
+      .mobile-flow-track {
+        gap: var(--gap);
+      }
+
+      .mobile-flow-column:nth-child(even) .mobile-flow-track {
+        animation-name: flowDown;
+      }
+
+      .mobile-flow-card {
+        border-radius: 18px;
+        box-shadow: 0 10px 28px rgba(8, 47, 73, 0.18);
+      }
+
+      .bottom-mask {
+        height: 62vh;
+      }
+
+      .entry {
+        bottom: clamp(180px, 34vh, 300px);
+      }
+
+      .enter-button {
+        min-width: 164px;
+        min-height: 52px;
+        padding: 0 28px;
+        font-size: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .desktop-flow-track,
+      .mobile-flow-track {
+        animation-play-state: paused;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" aria-label="LightMagic入口页">
+    <section class="desktop-layout" id="desktopLayout">
+      <aside class="fixed-column" id="fixedColumn" aria-hidden="true"></aside>
+      <section class="desktop-flow-zone" aria-hidden="true">
+        <div class="desktop-flow-window">
+          <div class="desktop-flow-track" id="desktopFlowTrack"></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="mobile-flow-wall" id="mobileFlowWall" aria-hidden="true"></section>
+
+    <div class="top-glow"></div>
+    <div class="bottom-mask"></div>
+    <div class="entry">
+      <a class="enter-button" href="gallery.html">进入相册</a>
+    </div>
+  </main>
+
+  <script src="assets/js/photos.js"></script>
+  <script>
+    const V3_CONFIG = {
+      fixedColumnCount: 7,
+      desktopFlowItemsPerLoop: 14,
+      desktopFlowDurationSeconds: 76,
+
+      mobileColumns: 2,
+      mobileItemsPerColumn: 6,
+      mobileBaseDurationSeconds: 72,
+      mobileSpeedVarianceSeconds: 10,
+
+      randomizeOnRefresh: true
+    };
+
+    const rawPhotos = Array.isArray(window.PHOTO_ITEMS) ? window.PHOTO_ITEMS : [];
+    const photos = rawPhotos.map((photo) => ({
+      ...photo,
+      src: photo.src
+    }));
+
+    const fixedColumn = document.getElementById("fixedColumn");
+    const desktopFlowTrack = document.getElementById("desktopFlowTrack");
+    const mobileFlowWall = document.getElementById("mobileFlowWall");
+
+    function isMobileLayout() {
+      return window.innerWidth <= 900;
+    }
+
+    function shuffle(items) {
+      const result = [...items];
+      if (!V3_CONFIG.randomizeOnRefresh) return result;
+
+      for (let i = result.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+      }
+      return result;
+    }
+
+    function makeImageCard(photo, className, eager) {
+      const card = document.createElement("article");
+      card.className = className;
+
+      const image = document.createElement("img");
+      image.src = photo.src;
+      image.alt = photo.title || "gallery photo";
+      image.loading = eager ? "eager" : "lazy";
+      image.decoding = "async";
+
+      card.appendChild(image);
+      return card;
+    }
+
+    function renderFixedColumn(photoPool) {
+      fixedColumn.innerHTML = "";
+      photoPool.slice(0, V3_CONFIG.fixedColumnCount).forEach((photo, index) => {
+        fixedColumn.appendChild(makeImageCard(photo, "fixed-card", index < 3));
+      });
+    }
+
+    function renderDesktopFlow(photoPool) {
+      desktopFlowTrack.innerHTML = "";
+      desktopFlowTrack.style.setProperty("--flow-duration", `${V3_CONFIG.desktopFlowDurationSeconds}s`);
+
+      const selected = photoPool.slice(
+        V3_CONFIG.fixedColumnCount,
+        V3_CONFIG.fixedColumnCount + V3_CONFIG.desktopFlowItemsPerLoop
+      );
+      const repeated = [...selected, ...selected];
+
+      repeated.forEach((photo, index) => {
+        desktopFlowTrack.appendChild(makeImageCard(photo, "desktop-flow-card", index < 3));
+      });
+    }
+
+    function renderMobileFlow(photoPool) {
+      mobileFlowWall.innerHTML = "";
+      mobileFlowWall.style.setProperty("--mobile-column-count", V3_CONFIG.mobileColumns);
+
+      for (let columnIndex = 0; columnIndex < V3_CONFIG.mobileColumns; columnIndex += 1) {
+        const column = document.createElement("div");
+        column.className = "mobile-flow-column";
+
+        const track = document.createElement("div");
+        track.className = "mobile-flow-track";
+
+        const duration = V3_CONFIG.mobileBaseDurationSeconds + Math.round(Math.random() * V3_CONFIG.mobileSpeedVarianceSeconds);
+        track.style.setProperty("--flow-duration", `${duration}s`);
+
+        const offset = columnIndex % Math.max(photoPool.length, 1);
+        const ordered = [...photoPool.slice(offset), ...photoPool.slice(0, offset)]
+          .slice(0, V3_CONFIG.mobileItemsPerColumn);
+        const repeated = [...ordered, ...ordered];
+
+        repeated.forEach((photo, index) => {
+          track.appendChild(makeImageCard(photo, "mobile-flow-card", index < 2));
+        });
+
+        column.appendChild(track);
+        mobileFlowWall.appendChild(column);
+      }
+    }
+
+    function renderPage() {
+      const photoPool = shuffle(photos);
+
+      if (isMobileLayout()) {
+        fixedColumn.innerHTML = "";
+        desktopFlowTrack.innerHTML = "";
+        renderMobileFlow(photoPool);
+        return;
+      }
+
+      mobileFlowWall.innerHTML = "";
+      renderFixedColumn(photoPool);
+      renderDesktopFlow(photoPool);
+    }
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(renderPage, 220);
+    });
+
+    renderPage();
+  </script>
+</body>
+</html>
