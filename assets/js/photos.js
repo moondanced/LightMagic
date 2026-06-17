@@ -153,7 +153,20 @@ window.PHOTO_ITEMS = [
   { id: 154, title: "雪夜街景", category: "城市", src: "assets/images-web/snow-street-building-01.jpg" },
   { id: 155, title: "冰封河湾", category: "风景", src: "assets/images-web/frozen-river-bend-01.jpg" },
   { id: 156, title: "窗边猫", category: "动物", src: "assets/images-web/window-cat-01.jpg" },
-  { id: 157, title: "夜色抽油机", category: "城市", src: "assets/images-web/oil-pumpjack-night-01.jpg" }
+  { id: 157, title: "夜色抽油机", category: "城市", src: "assets/images-web/oil-pumpjack-night-01.jpg" },
+  { id: 158, title: "月亮特写", category: "风景", src: "assets/images-web/moon-closeup-01.jpg" },
+  { id: 159, title: "普通翠鸟", category: "鸟类", src: "assets/images-web/common-kingfisher-01.jpg" },
+  { id: 160, title: "蓝天泡泡", category: "生活", src: "assets/images-web/soap-bubbles-sky-01.jpg" },
+  { id: 161, title: "蓝天粉花", category: "植物", src: "assets/images-web/pink-flowers-blue-sky-01.jpg" },
+  { id: 162, title: "枝头斑鸠", category: "鸟类", src: "assets/images-web/branch-perched-dove-01.jpg" },
+  { id: 163, title: "城市飞鸟", category: "鸟类", src: "assets/images-web/urban-bird-flight-01.jpg" },
+  { id: 164, title: "白头鹎", category: "鸟类", src: "assets/images-web/light-vented-bulbul-01.jpg" },
+  { id: 165, title: "肥皂泡微距 01", category: "生活", src: "assets/images-web/soap-bubble-macro-01.jpg" },
+  { id: 166, title: "肥皂泡微距 02", category: "生活", src: "assets/images-web/soap-bubble-macro-02.jpg" },
+  { id: 167, title: "肥皂泡倒影 01", category: "生活", src: "assets/images-web/soap-bubble-reflection-01.jpg" },
+  { id: 168, title: "肥皂泡倒影 02", category: "生活", src: "assets/images-web/soap-bubble-reflection-02.jpg" },
+  { id: 169, title: "泡泡虹彩 01", category: "生活", src: "assets/images-web/soap-bubble-iridescence-01.jpg" },
+  { id: 170, title: "泡泡虹彩 02", category: "生活", src: "assets/images-web/soap-bubble-iridescence-02.jpg" }
 ];
 
 window.PHOTO_CATEGORIES = ["全部", "风景", "植物", "城市", "建筑", "活动", "生活", "食物", "动物", "鸟类"];
