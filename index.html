@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>LightMagic</title>
   <style>
     * {
@@ -206,6 +207,116 @@
       box-shadow: 0 22px 58px rgba(14, 165, 233, 0.34), 0 16px 48px rgba(16, 185, 129, 0.24);
     }
 
+    .access-card {
+      width: min(430px, calc(100vw - 32px));
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 28px 80px rgba(8, 47, 73, 0.2);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .access-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      border-radius: 16px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0891b2, #14b8a6);
+      box-shadow: 0 12px 28px rgba(14, 165, 233, 0.28);
+      font-size: 22px;
+    }
+
+    .access-title {
+      color: #075985;
+      font-size: clamp(26px, 5vw, 34px);
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+    }
+
+    .access-copy {
+      margin-top: 10px;
+      color: #0f766e;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .access-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .access-input {
+      min-width: 0;
+      height: 52px;
+      padding: 0 16px;
+      border: 1px solid rgba(14, 165, 233, 0.24);
+      border-radius: 16px;
+      outline: none;
+      color: #075985;
+      background: rgba(255, 255, 255, 0.94);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .access-input:focus {
+      border-color: rgba(8, 145, 178, 0.72);
+      box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.16);
+    }
+
+    .access-submit {
+      min-width: 112px;
+      height: 52px;
+      padding: 0 20px;
+      border: 1px solid rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0891b2, #14b8a6);
+      box-shadow: 0 12px 28px rgba(14, 165, 233, 0.24);
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .access-submit:disabled {
+      cursor: wait;
+      opacity: 0.68;
+    }
+
+    .access-message {
+      min-height: 22px;
+      margin-top: 10px;
+      color: #b91c1c;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
     @keyframes flowUp {
       from { transform: translate3d(0, 0, 0); }
       to { transform: translate3d(0, -50%, 0); }
@@ -282,9 +393,27 @@
         animation-play-state: paused;
       }
     }
+
+    body.is-locked .desktop-layout,
+    body.is-locked .mobile-flow-wall {
+      display: none;
+    }
+
+    body.is-locked .entry {
+      top: 50%;
+      bottom: auto;
+      width: min(430px, calc(100vw - 32px));
+      transform: translate(-50%, -50%);
+    }
+
+    @media (max-width: 520px) {
+      .access-card { padding: 24px; border-radius: 26px; }
+      .access-row { grid-template-columns: 1fr; }
+      .access-submit { width: 100%; }
+    }
   </style>
 </head>
-<body>
+<body class="is-locked">
   <main class="stage" aria-label="LightMagic入口页">
     <section class="desktop-layout" id="desktopLayout">
       <aside class="fixed-column" id="fixedColumn" aria-hidden="true"></aside>
@@ -300,10 +429,22 @@
     <div class="top-glow"></div>
     <div class="bottom-mask"></div>
     <div class="entry">
-      <a class="enter-button" href="gallery.html">进入相册</a>
+      <form class="access-card" id="accessForm" novalidate>
+        <div class="access-mark" aria-hidden="true">⌁</div>
+        <h1 class="access-title">请输入提取码</h1>
+        <p class="access-copy">访问 LightMagic 私人相册</p>
+        <div class="access-row">
+          <label class="visually-hidden" for="accessCode">提取码</label>
+          <input class="access-input" id="accessCode" name="accessCode" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go" placeholder="六位提取码" aria-describedby="accessMessage" />
+          <button class="access-submit" id="accessSubmit" type="submit">打开相册</button>
+        </div>
+        <p class="access-message" id="accessMessage" role="status" aria-live="polite"></p>
+      </form>
+      <a class="enter-button" id="enterButton" href="gallery.html" hidden>进入相册</a>
     </div>
   </main>
 
+  <script src="assets/js/access.js"></script>
   <script src="assets/js/photos.js"></script>
   <script>
     const V3_CONFIG = {
@@ -328,6 +469,12 @@
     const fixedColumn = document.getElementById("fixedColumn");
     const desktopFlowTrack = document.getElementById("desktopFlowTrack");
     const mobileFlowWall = document.getElementById("mobileFlowWall");
+    const accessForm = document.getElementById("accessForm");
+    const accessCode = document.getElementById("accessCode");
+    const accessSubmit = document.getElementById("accessSubmit");
+    const accessMessage = document.getElementById("accessMessage");
+    const enterButton = document.getElementById("enterButton");
+    const accessApi = window.LightMagicAccess;
 
     function isMobileLayout() {
       return window.innerWidth <= 900;
@@ -423,13 +570,64 @@
       renderDesktopFlow(photoPool);
     }
 
+    function showUnlockedEntry() {
+      document.body.classList.remove("is-locked");
+      accessForm.hidden = true;
+      enterButton.hidden = false;
+      renderPage();
+    }
+
+    async function handleAccessSubmit(event) {
+      event.preventDefault();
+      const normalizedCode = accessApi ? accessApi.normalizeCode(accessCode.value) : "";
+
+      if (!normalizedCode) {
+        accessMessage.textContent = "请输入提取码。";
+        accessCode.focus();
+        return;
+      }
+
+      accessSubmit.disabled = true;
+      accessSubmit.textContent = "验证中…";
+      accessMessage.textContent = "";
+
+      try {
+        if (!accessApi || !(await accessApi.verify(normalizedCode))) {
+          accessMessage.textContent = "提取码不正确，请重新输入。";
+          accessCode.select();
+          return;
+        }
+
+        accessApi.unlock();
+        window.location.assign("gallery.html");
+      } catch (error) {
+        accessMessage.textContent = error && error.message ? error.message : "验证失败，请稍后重试。";
+        accessCode.focus();
+      } finally {
+        accessSubmit.disabled = false;
+        accessSubmit.textContent = "打开相册";
+      }
+    }
+
+    accessForm.addEventListener("submit", handleAccessSubmit);
+    accessCode.addEventListener("input", () => {
+      if (!accessApi) return;
+      accessCode.value = accessApi.normalizeCode(accessCode.value).slice(0, 6);
+      accessMessage.textContent = "";
+    });
+
     let resizeTimer = null;
     window.addEventListener("resize", () => {
+      if (document.body.classList.contains("is-locked")) return;
       window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(renderPage, 220);
     });
 
-    renderPage();
+    if (accessApi && accessApi.isUnlocked()) {
+      showUnlockedEntry();
+    } else {
+      accessCode.focus();
+    }
   </script>
 </body>
 </html>

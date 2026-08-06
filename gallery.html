@@ -1,9 +1,19 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="access-checking">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>LightMagic</title>
+  <style>.access-checking { visibility: hidden; }</style>
+  <script src="assets/js/access.js"></script>
+  <script>
+    if (window.LightMagicAccess && window.LightMagicAccess.isUnlocked()) {
+      document.documentElement.classList.remove("access-checking");
+    } else {
+      window.location.replace("index.html?locked=1");
+    }
+  </script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
