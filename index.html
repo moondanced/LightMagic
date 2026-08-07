@@ -475,6 +475,12 @@
     const accessMessage = document.getElementById("accessMessage");
     const enterButton = document.getElementById("enterButton");
     const accessApi = window.LightMagicAccess;
+    const returnParams = new URLSearchParams(window.location.search);
+    const allowedReturnTargets = new Set(["gallery.html", "flow-preview-v1.html"]);
+    const requestedReturnTarget = returnParams.get("next");
+    const returnTarget = allowedReturnTargets.has(requestedReturnTarget)
+      ? requestedReturnTarget
+      : "gallery.html";
 
     function isMobileLayout() {
       return window.innerWidth <= 900;
@@ -599,7 +605,7 @@
         }
 
         accessApi.unlock();
-        window.location.assign("gallery.html");
+        window.location.assign(returnTarget);
       } catch (error) {
         accessMessage.textContent = error && error.message ? error.message : "验证失败，请稍后重试。";
         accessCode.focus();
@@ -626,6 +632,9 @@
     if (accessApi && accessApi.isUnlocked()) {
       showUnlockedEntry();
     } else {
+      if (returnParams.get("reason") === "nfc") {
+        accessMessage.textContent = "NFC 通行链接无效或已失效，请输入提取码。";
+      }
       accessCode.focus();
     }
   </script>
