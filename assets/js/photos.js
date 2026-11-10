@@ -166,7 +166,27 @@ window.PHOTO_ITEMS = [
   { id: 167, title: "肥皂泡倒影 01", category: "生活", src: "assets/images-web/soap-bubble-reflection-01.jpg" },
   { id: 168, title: "肥皂泡倒影 02", category: "生活", src: "assets/images-web/soap-bubble-reflection-02.jpg" },
   { id: 169, title: "泡泡虹彩 01", category: "生活", src: "assets/images-web/soap-bubble-iridescence-01.jpg" },
-  { id: 170, title: "泡泡虹彩 02", category: "生活", src: "assets/images-web/soap-bubble-iridescence-02.jpg" }
+  { id: 170, title: "泡泡虹彩 02", category: "生活", src: "assets/images-web/soap-bubble-iridescence-02.jpg" },
+  { id: 171, title: "城市斜拉桥", category: "城市", src: "assets/images-web/city-cable-stayed-bridge-01.jpg" },
+  { id: 172, title: "云冈石窟佛像", category: "建筑", src: "assets/images-web/yungang-grotto-buddha-01.jpg" },
+  { id: 173, title: "窗前城市", category: "城市", src: "assets/images-web/city-window-view-01.jpg" },
+  { id: 174, title: "应县木塔", category: "建筑", src: "assets/images-web/yingxian-wooden-pagoda-01.jpg" },
+  { id: 175, title: "山巅黄牛", category: "动物", src: "assets/images-web/mountain-cow-sky-01.jpg" },
+  { id: 176, title: "池塘飞鸟", category: "鸟类", src: "assets/images-web/pond-flying-bird-01.webp" },
+  { id: 177, title: "树梢上的月亮", category: "风景", src: "assets/images-web/moon-above-treetops-01.webp" },
+  { id: 178, title: "城市落日倒影", category: "城市", src: "assets/images-web/city-sunset-reflection-01.webp" },
+  { id: 179, title: "黄墙寺门", category: "建筑", src: "assets/images-web/yellow-temple-gate-01.webp" },
+  { id: 180, title: "纪念雕像", category: "建筑", src: "assets/images-web/memorial-statue-01.webp" },
+  { id: 181, title: "睡莲池畔水鸟", category: "鸟类", src: "assets/images-web/water-lily-pond-bird-01.webp" },
+  { id: 182, title: "黄椅旁的白鸽", category: "鸟类", src: "assets/images-web/white-pigeons-yellow-chairs-01.webp" },
+  { id: 183, title: "林间向日葵园", category: "植物", src: "assets/images-web/sunflower-garden-trees-01.webp" },
+  { id: 184, title: "花间白蝴蝶", category: "动物", src: "assets/images-web/white-butterfly-flowers-01.webp" },
+  { id: 185, title: "向日葵花海", category: "植物", src: "assets/images-web/sunflower-field-01.webp" },
+  { id: 186, title: "向日葵特写", category: "植物", src: "assets/images-web/sunflower-closeup-01.webp" },
+  { id: 187, title: "向日葵花影", category: "植物", src: "assets/images-web/sunflower-portrait-01.webp" },
+  { id: 188, title: "绿叶橙花", category: "植物", src: "assets/images-web/orange-blossoms-leaves-01.webp" },
+  { id: 189, title: "树影落日", category: "风景", src: "assets/images-web/sunset-through-trees-01.webp" },
+  { id: 190, title: "水面金光", category: "风景", src: "assets/images-web/impressionist-water-reflection-01.webp" }
 ];
 
 window.PHOTO_CATEGORIES = ["全部", "风景", "植物", "城市", "建筑", "活动", "生活", "食物", "动物", "鸟类"];
