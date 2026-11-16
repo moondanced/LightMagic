@@ -179,7 +179,7 @@ window.BLOG_POSTS = [
         "type": "image",
         "alt": "四项基本保障维度之间的联系",
         "src": "assets/posts/survival-elements.svg?v=d438af6bc702",
-        "caption": "人身权利在上方体现主体资格与制度保障，生理维持涵盖氧气、营养与水分以及适宜的温度和压力条件。实线表示制度保障与直接支持，虚线表示行动路径与反馈。"
+        "caption": ""
       },
       {
         "type": "paragraph",
