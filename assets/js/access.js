@@ -2,8 +2,8 @@
   "use strict";
 
   const STORAGE_KEY = "lightmagic.gallery.access.v1";
-  const ACCESS_SALT = "2c2d282b530f65e5d4d6c8a10053a42a";
-  const ACCESS_DIGEST = "997b175f898dfc1652a70af39eaaffc66f6399bc3ac254d88db6714dce53446e";
+  const ACCESS_SALT = "34d77e5810c5e35d329d4873d72419fd";
+  const ACCESS_DIGEST = "c9cbcc2b4edb98f0947c2da5d75f92592fae5d89eccbe197667576e6ef0ed374";
   const NFC_CARDS = Object.freeze({
     nfc01: Object.freeze({
       salt: "469cbf6172de8797f2726506fbe80429",
