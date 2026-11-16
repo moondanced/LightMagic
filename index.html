@@ -413,7 +413,7 @@
     }
   </style>
 </head>
-<body class="is-locked">
+<body>
   <main class="stage" aria-label="LightMagic入口页">
     <section class="desktop-layout" id="desktopLayout">
       <aside class="fixed-column" id="fixedColumn" aria-hidden="true"></aside>
@@ -429,7 +429,7 @@
     <div class="top-glow"></div>
     <div class="bottom-mask"></div>
     <div class="entry">
-      <form class="access-card" id="accessForm" novalidate>
+      <form class="access-card" id="accessForm" novalidate hidden>
         <div class="access-mark" aria-hidden="true">⌁</div>
         <h1 class="access-title">请输入提取码</h1>
         <p class="access-copy">访问 LightMagic 私人相册</p>
@@ -440,7 +440,7 @@
         </div>
         <p class="access-message" id="accessMessage" role="status" aria-live="polite"></p>
       </form>
-      <a class="enter-button" id="enterButton" href="gallery.html" hidden>进入相册</a>
+      <a class="enter-button" id="enterButton" href="gallery.html">进入相册</a>
     </div>
   </main>
 
@@ -632,6 +632,9 @@
     if (accessApi && accessApi.isUnlocked()) {
       showUnlockedEntry();
     } else {
+      document.body.classList.add("is-locked");
+      accessForm.hidden = false;
+      enterButton.hidden = true;
       if (returnParams.get("reason") === "nfc") {
         accessMessage.textContent = "NFC 通行链接无效或已失效，请输入提取码。";
       }

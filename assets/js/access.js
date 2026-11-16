@@ -1,6 +1,7 @@
 (function () {
   "use strict";
 
+  const PUBLIC_ACCESS = true;
   const STORAGE_KEY = "lightmagic.gallery.access.v1";
   const ACCESS_SALT = "34d77e5810c5e35d329d4873d72419fd";
   const ACCESS_DIGEST = "c9cbcc2b4edb98f0947c2da5d75f92592fae5d89eccbe197667576e6ef0ed374";
@@ -43,7 +44,7 @@
   }
 
   function isUnlocked() {
-    return readSession() === ACCESS_DIGEST;
+    return PUBLIC_ACCESS || readSession() === ACCESS_DIGEST;
   }
 
   async function verify(code) {
