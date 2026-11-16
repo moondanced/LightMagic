@@ -476,7 +476,7 @@
     const enterButton = document.getElementById("enterButton");
     const accessApi = window.LightMagicAccess;
     const returnParams = new URLSearchParams(window.location.search);
-    const allowedReturnTargets = new Set(["gallery.html", "flow-preview-v1.html"]);
+    const allowedReturnTargets = new Set(["gallery.html", "flow-preview-v1.html", "blog.html"]);
     const requestedReturnTarget = returnParams.get("next");
     const returnTarget = allowedReturnTargets.has(requestedReturnTarget)
       ? requestedReturnTarget

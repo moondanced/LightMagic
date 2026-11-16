@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="access-checking">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>随笔 · P-1899</title>
+  <style>.access-checking { visibility: hidden; }</style>
+  <script src="assets/js/access.js"></script>
+  <script>
+    if (window.LightMagicAccess && window.LightMagicAccess.isUnlocked()) {
+      document.documentElement.classList.remove("access-checking");
+    } else {
+      window.location.replace("index.html?locked=1&next=blog.html");
+    }
+  </script>
+  <link rel="stylesheet" href="assets/blog.css" />
+  <script src="assets/js/blog.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="site-header">
+      <nav class="nav-row" aria-label="页面导航">
+        <a class="nav-link" href="index.html">首页</a>
+        <a class="nav-link" href="gallery.html">相册</a>
+        <a class="nav-link current" href="blog.html" aria-current="page">随笔</a>
+      </nav>
+      <span class="site-mark">LIGHTMAGIC <span aria-hidden="true">/</span> WORDS</span>
+    </header>
+    <main id="main">
+      <section id="listView" aria-labelledby="blogTitle">
+        <header class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="status-dot"></span> 文字里的另一种显影</p>
+            <h1 id="blogTitle">P-1899 <span>· 随笔</span></h1>
+            <p class="intro">把未曾入镜的片刻，<br class="mobile-break" />留在文字里。</p>
+          </div>
+          <div class="hero-note" aria-label="博客寄语">
+            <span class="note-line" aria-hidden="true"></span>
+            <p>照片收藏光。<br />文字收藏光落下以后，<br />心里留下的声音。</p>
+            <span class="note-sign">一些观察，一些漫想。</span>
+          </div>
+          <div class="hero-bottom"><span>散文 / 随笔 / 日常的余温</span><span class="preview-label">第一期 · 思考与生活</span></div>
+        </header>
+        <section class="writing-desk" aria-label="文章列表">
+          <div class="desk-toolbar">
+            <div class="filters" role="group" aria-label="文章分类">
+              <button class="filter active" type="button" data-category="全部" aria-pressed="true">全部</button>
+              <button class="filter" type="button" data-category="散文" aria-pressed="false">散文</button>
+              <button class="filter" type="button" data-category="随笔" aria-pressed="false">随笔</button>
+            </div>
+            <label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">搜索文章标题或内容</span><input id="searchInput" type="search" placeholder="寻找一段文字…" /></label>
+          </div>
+          <div class="list-heading"><span>文字存档 <span class="archive-en">/ THE JOURNAL</span></span><span id="resultCount" role="status" aria-live="polite"></span></div>
+          <div id="postList"></div>
+          <p class="empty" id="emptyState" hidden>暂时没有找到这段文字。<br /><button id="resetSearch" type="button">查看全部文章</button></p>
+          <div class="desk-end"><span aria-hidden="true">✳</span><p>不急着抵达，先写下此刻。</p></div>
+        </section>
+      </section>
+      <section id="readerView" class="reader" hidden aria-labelledby="articleTitle">
+        <button id="backButton" class="back-button" type="button">← 返回文章列表</button>
+        <article class="reading-paper">
+          <header class="article-header"><p id="articleMeta" class="eyebrow"></p><h1 id="articleTitle" tabindex="-1"></h1><p class="article-byline" id="articleByline"></p></header>
+          <div id="articleBody" class="prose"></div>
+          <footer class="article-end"><span aria-hidden="true">✳</span><p>写在光落下的地方。</p><button id="bottomBackButton" type="button" class="back-button">返回文章列表 ↑</button></footer>
+        </article>
+      </section>
+    </main>
+    <footer class="site-footer"><a href="gallery.html">LIGHTMAGIC <span>光影与文字</span></a></footer>
+  </div>
+</body>
+</html>

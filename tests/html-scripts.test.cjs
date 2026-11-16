@@ -3,7 +3,7 @@ const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const { test } = require("node:test");
 
-for (const filename of ["index.html", "gallery.html", "flow-preview-v1.html"]) {
+for (const filename of ["index.html", "gallery.html", "flow-preview-v1.html", "blog.html"]) {
   test(`${filename} 的内联脚本语法有效`, () => {
     const html = readFileSync(path.join(__dirname, "..", filename), "utf8");
     const scripts = Array.from(html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi));
@@ -47,7 +47,7 @@ test("旧版流动预览在门禁通过前不加载照片清单", () => {
 
 test("密码入口只允许返回已知页面", () => {
   const html = readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-  assert.match(html, /new Set\(\["gallery\.html", "flow-preview-v1\.html"\]\)/);
+  assert.match(html, /new Set\(\["gallery\.html", "flow-preview-v1\.html", "blog\.html"\]\)/);
   assert.match(html, /window\.location\.assign\(returnTarget\)/);
   assert.match(html, /NFC 通行链接无效或已失效/);
 });
