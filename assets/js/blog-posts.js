@@ -178,7 +178,7 @@ window.BLOG_POSTS = [
       {
         "type": "image",
         "alt": "四项基本保障维度之间的联系",
-        "src": "assets/posts/survival-elements.svg?v=107b373d3b89",
+        "src": "assets/posts/survival-elements.svg?v=22a465bd6db9",
         "caption": ""
       },
       {
