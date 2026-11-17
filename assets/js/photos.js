@@ -173,7 +173,7 @@ window.PHOTO_ITEMS = [
   { id: 174, title: "应县木塔", category: "建筑", src: "assets/images-web/yingxian-wooden-pagoda-01.jpg" },
   { id: 175, title: "山巅黄牛", category: "动物", src: "assets/images-web/mountain-cow-sky-01.jpg" },
   { id: 176, title: "池塘飞鸟", category: "鸟类", src: "assets/images-web/pond-flying-bird-01.webp" },
-  { id: 177, title: "树梢上的月亮", category: "风景", src: "assets/images-web/moon-above-treetops-01.webp" },
+  { id: 177, title: "树梢上的灰喜鹊", category: "鸟类", src: "assets/images-web/azure-winged-magpie-treetop-01.webp" },
   { id: 178, title: "城市落日倒影", category: "城市", src: "assets/images-web/city-sunset-reflection-01.webp" },
   { id: 179, title: "黄墙寺门", category: "建筑", src: "assets/images-web/yellow-temple-gate-01.webp" },
   { id: 180, title: "纪念雕像", category: "建筑", src: "assets/images-web/memorial-statue-01.webp" },
