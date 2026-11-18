@@ -186,7 +186,16 @@ window.PHOTO_ITEMS = [
   { id: 187, title: "向日葵花影", category: "植物", src: "assets/images-web/sunflower-portrait-01.webp" },
   { id: 188, title: "绿叶橙花", category: "植物", src: "assets/images-web/orange-blossoms-leaves-01.webp" },
   { id: 189, title: "树影落日", category: "风景", src: "assets/images-web/sunset-through-trees-01.webp" },
-  { id: 190, title: "水面金光", category: "风景", src: "assets/images-web/impressionist-water-reflection-01.webp" }
+  { id: 190, title: "水面金光", category: "风景", src: "assets/images-web/impressionist-water-reflection-01.webp" },
+  { id: 191, title: "河滩航拍", category: "风景", src: "assets/images-web/river-shoal-aerial-01.webp" },
+  { id: 192, title: "河上灯桥", category: "城市", src: "assets/images-web/illuminated-bridge-river-01.webp" },
+  { id: 193, title: "夜幕中的初号机", category: "生活", src: "assets/images-web/evangelion-unit-01-night-01.webp" },
+  { id: 194, title: "野餐便当", category: "食物", src: "assets/images-web/picnic-lunchbox-01.webp" },
+  { id: 195, title: "湖山暮色", category: "风景", src: "assets/images-web/lakeside-mountain-dusk-01.webp" },
+  { id: 196, title: "蓝天下的古建门楼", category: "建筑", src: "assets/images-web/traditional-gate-blue-sky-01.webp" },
+  { id: 197, title: "纸伞长巷", category: "城市", src: "assets/images-web/paper-umbrella-alley-01.webp" },
+  { id: 198, title: "蓝天系留气球", category: "生活", src: "assets/images-web/tethered-balloon-blue-sky-01.webp" },
+  { id: 199, title: "湖畔落日倒影", category: "风景", src: "assets/images-web/lakeside-sunset-reflection-01.webp" }
 ];
 
 window.PHOTO_CATEGORIES = ["全部", "风景", "植物", "城市", "建筑", "活动", "生活", "食物", "动物", "鸟类"];
