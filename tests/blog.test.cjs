@@ -32,14 +32,25 @@ test("缺少较新 DOM 接口的移动浏览器也能显示列表并打开全文
   vm.runInContext(readFileSync(path.join(root, "assets/js/blog-posts.js"), "utf8"), context);
   vm.runInContext(readFileSync(path.join(root, "assets/js/blog.js"), "utf8"), context);
   document.head.firstChild.onload();
-  assert.equal(nodes.postList.children.length, 1);
-  assert.equal(nodes.resultCount.textContent, "01 篇");
-  const title = nodes.postList.firstChild.children[1].firstChild;
+  assert.equal(nodes.postList.children.length, window.BLOG_POSTS.length);
+  assert.equal(nodes.resultCount.textContent, String(window.BLOG_POSTS.length).padStart(2, "0") + " 篇");
+  const original = nodes.postList.children.find(node => node.children[1].firstChild.textContent === "21世纪碳基人类生存要素");
+  const title = original.children[1].firstChild;
   title.listeners.click();
   assert.equal(nodes.articleTitle.textContent, "21世纪碳基人类生存要素");
   assert.equal(nodes.readerView.hidden, false);
   assert.ok(nodes.articleBody.children.length > 20);
   assert.ok(nodes.articleBody.children.some(node => node.id === "reference-10"));
+  const added = nodes.postList.children.find(node => node.children[1].firstChild.textContent === "科技资本化与政治权力资本化");
+  added.children[1].firstChild.listeners.click();
+  assert.equal(nodes.articleTitle.textContent, "科技资本化与政治权力资本化");
+  const references = nodes.articleBody.children.filter(node => node.id && node.id.startsWith("reference-"));
+  assert.equal(references.length, 21);
+  const referenceIds = new Set(references.map(node => node.id));
+  const citations = nodes.articleBody.children.flatMap(node => node.children || []).filter(node => node.className === "citation");
+  assert.ok(citations.length > 20);
+  assert.ok(citations.every(node => referenceIds.has(node.href.slice(1))));
+  assert.ok(references.find(node => node.id === "reference-12").firstChild.href.includes("ri.se"));
 });
 
 test("未解锁博客回到现有提取码入口，且不加载文章", () => {
