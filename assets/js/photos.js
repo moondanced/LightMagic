@@ -10,7 +10,7 @@ window.PHOTO_ITEMS = [
   { id: 9, title: "石拱遗迹", category: "建筑", src: "assets/images-web/stone-arches-01.jpg" },
   { id: 10, title: "石柱遗迹", category: "建筑", src: "assets/images-web/stone-ruins-01.jpg" },
   { id: 11, title: "石拱空间", category: "建筑", src: "assets/images-web/stone-arches-02.jpg" },
-  { id: 12, title: "岩岸水鸟", category: "鸟类", src: "assets/images-web/rocky-shore-bird-01.jpg" },
+  { id: 12, title: "岩岸垂钓", category: "生活", src: "assets/images-web/rocky-shore-bird-01.jpg" },
   { id: 13, title: "路边猕猴", category: "动物", src: "assets/images-web/macaque-roadside-01.jpg" },
   { id: 14, title: "军营开放日", category: "活动", src: "assets/images-web/hong-kong-garrison-open-day-01.jpg" },
   { id: 15, title: "军舰展示", category: "活动", src: "assets/images-web/naval-ship-display-01.jpg" },
