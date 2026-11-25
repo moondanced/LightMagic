@@ -2,7 +2,7 @@
   "use strict";
   if (!window.LightMagicAccess || !window.LightMagicAccess.isUnlocked()) return;
   const dataScript = document.createElement("script");
-  dataScript.src = "assets/js/blog-posts.js?v=20261124-capital-1";
+  dataScript.src = "assets/js/blog-posts.js?v=20261125-production-1";
   dataScript.onload = () => {
     try { initialize(); }
     catch (error) {

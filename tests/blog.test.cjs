@@ -45,7 +45,11 @@ test("缺少较新 DOM 接口的移动浏览器也能显示列表并打开全文
   added.children[1].firstChild.listeners.click();
   assert.equal(nodes.articleTitle.textContent, "科技资本化与政治权力资本化");
   const references = nodes.articleBody.children.filter(node => node.id && node.id.startsWith("reference-"));
-  assert.equal(references.length, 21);
+  assert.equal(references.length, 31);
+  const headings = nodes.articleBody.children.filter(node => node.className === "" && typeof node.textContent === "string").map(node => node.textContent);
+  const publishedBlocks = window.BLOG_POSTS.find(post => post.id === "technology-capital-power").blocks;
+  const headingTexts = publishedBlocks.filter(block => block.type === "heading").map(block => block.text);
+  assert.equal(headingTexts.indexOf("作为生产要素的技术") + 1, headingTexts.indexOf("技术成为生产要素之后"));
   const referenceIds = new Set(references.map(node => node.id));
   const citations = nodes.articleBody.children.flatMap(node => node.children || []).filter(node => node.className === "citation");
   assert.ok(citations.length > 20);
