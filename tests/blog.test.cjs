@@ -45,7 +45,7 @@ test("缺少较新 DOM 接口的移动浏览器也能显示列表并打开全文
   added.children[1].firstChild.listeners.click();
   assert.equal(nodes.articleTitle.textContent, "科技资本化与公共权力资本化");
   const references = nodes.articleBody.children.filter(node => node.id && node.id.startsWith("reference-"));
-  assert.equal(references.length, 46);
+  assert.equal(references.length, 43);
   const headings = nodes.articleBody.children.filter(node => node.className === "" && typeof node.textContent === "string").map(node => node.textContent);
   const publishedBlocks = window.BLOG_POSTS.find(post => post.id === "technology-capital-power").blocks;
   const headingTexts = publishedBlocks.filter(block => block.type === "heading").map(block => block.text);
@@ -56,7 +56,7 @@ test("缺少较新 DOM 接口的移动浏览器也能显示列表并打开全文
   const citations = nodes.articleBody.children.flatMap(node => node.children || []).filter(node => node.className === "citation");
   assert.ok(citations.length > 20);
   assert.ok(citations.every(node => referenceIds.has(node.href.slice(1))));
-  assert.ok(references.find(node => node.id === "reference-12").firstChild.href.includes("ri.se"));
+  assert.ok(references.find(node => node.id === "reference-9").firstChild.href.includes("ri.se"));
 });
 
 test("未解锁博客回到现有提取码入口，且不加载文章", () => {
