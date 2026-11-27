@@ -302,6 +302,12 @@ window.BLOG_POSTS = [
         "type": "reference",
         "text": "18. Stevenson与Wolfers，2007，《婚姻与离婚：变化及其驱动力》。",
         "href": "https://www.nber.org/papers/w12944"
+      },
+      {
+        "type": "image",
+        "alt": "黄椅旁的白鸽",
+        "src": "assets/images-web/white-pigeons-yellow-chairs-01.webp",
+        "caption": ""
       }
     ]
   },
