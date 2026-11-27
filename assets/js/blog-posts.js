@@ -498,6 +498,12 @@ window.BLOG_POSTS = [
         "type": "reference",
         "text": "34. 国际刑警组织. Corruption 关于经济全球化 腐败跨境化与资产追缴的说明。",
         "href": "https://www.interpol.int/en/Crimes/Corruption"
+      },
+      {
+        "type": "image",
+        "alt": "石拱遗迹",
+        "src": "assets/stone-arches-01.jpg",
+        "caption": ""
       }
     ]
   },
